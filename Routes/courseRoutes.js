@@ -9,7 +9,7 @@ const {
   updateCourse,
   deleteCourse,
   getTeacherCourses,
-} = require("../controllers/courseController");
+} = require("../Controllers/courseController");
 
 // Apply auth middleware to all routes
 CourseRoute.use(auth);
