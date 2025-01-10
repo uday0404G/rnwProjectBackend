@@ -3,16 +3,17 @@ require('dotenv').config()
 const connection = require('./Config/Config')
 const cors = require('cors')
 const userRoute = require('./Routes/userRoute')
+const CourseRoute = require('./routes/courseRoutes')
 const app = express()
 const port = process.env.PORT||3000
-const teacherRoutes = require("./routes/teacherRoutes");
+
 
 
 app.use(express.json())
 app.use(cors())
 app.use('/user', userRoute)
-app.use("/courses", courseRoutes);
-app.use("/teacher", teacherRoutes);
+app.use("/courses", CourseRoute);
+
 
 
 

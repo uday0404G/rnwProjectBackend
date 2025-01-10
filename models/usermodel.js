@@ -20,6 +20,24 @@ const userSchema = new mongoose.Schema({
         default: "student",
         enum: ["student", "teacher"]
     },
+    bio: {
+        type: String
+    },
+    phone: {
+        type: String
+    },
+    avatar: {
+        type: String
+    },
+    status: {
+        type: String,
+        enum: ['active', 'inactive'],
+        default: 'active'
+    },
+    enrolledCourses: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Course'
+    }],
     createdAt: {
         type: Date,
         default: Date.now

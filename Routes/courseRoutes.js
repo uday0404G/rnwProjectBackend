@@ -1,26 +1,29 @@
 const express = require("express");
-const router = express.Router();
+const CourseRoute = express.Router();
+const { auth } = require("../Middleware/auth");
+const { authorizeTeacher } = require("../Middleware/teacherAuth");
 const {
   createCourse,
   getCourses,
   getCourseById,
   updateCourse,
   deleteCourse,
+  getTeacherCourses,
 } = require("../controllers/courseController");
 
-// Route to create a new course
-router.post("/", createCourse);
+// Apply auth middleware to all routes
+CourseRoute.use(auth);
 
-// Route to get all courses
-router.get("/", getCourses);
+// Public routes
+CourseRoute.get("/", getCourses);
+CourseRoute.get("/:id", getCourseById);
 
-// Route to get a specific course by ID
-router.get("/:id", getCourseById);
+// Teacher-only routes
+CourseRoute.post("/", authorizeTeacher, createCourse);
+CourseRoute.put("/:id", authorizeTeacher, updateCourse);
+CourseRoute.delete("/:id", authorizeTeacher, deleteCourse);
 
-// Route to update a course
-router.put("/:id", updateCourse);
+// Add new route for teacher courses
+CourseRoute.get('/teacher/:teacherId', getTeacherCourses);
 
-// Route to delete a course
-router.delete("/:id", deleteCourse);
-
-module.exports = router;
+module.exports = CourseRoute;

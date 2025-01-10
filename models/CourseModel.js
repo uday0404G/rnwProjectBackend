@@ -19,27 +19,43 @@ const courseSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-    lessons: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Lesson",
-      },
-    ],
-    category: {
-      type: String,
-      required: true,
-    },
     duration: {
-      type: Number,
-      required: true,
+      type: String,
+      required: false,
     },
     level: {
       type: String,
       enum: ['beginner', 'intermediate', 'advanced'],
-      required: true
-    }
+      default: 'beginner',
+      required: false
+    },
+    enrolledStudents: [{
+      student: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      },
+      enrollmentDate: {
+        type: Date,
+        default: Date.now
+      },
+      progress: {
+        type: Number,
+        default: 0
+      }
+    }],
+    completions: [{
+      student: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      },
+      date: {
+        type: Date,
+        default: Date.now
+      }
+    }]
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Course", courseSchema);
+const Course = mongoose.model("Course", courseSchema);
+module.exports = Course;
