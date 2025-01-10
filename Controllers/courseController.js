@@ -1,5 +1,6 @@
 const Course = require("../models/CourseModel");
 const mongoose = require('mongoose');
+const User = require("../models/usermodel");
 
 const createCourse = async (req, res) => {
   try {
@@ -115,12 +116,79 @@ const getTeacherCourses = async (req, res) => {
   }
 };
 
+const enrollInCourse = async (req, res) => {
+    try {
+        const { courseId } = req.params;
+        const userId = req.user.userId;
+
+        // Check if course exists
+        const course = await Course.findById(courseId);
+        if (!course) {
+            return res.status(404).json({ message: "Course not found" });
+        }
+
+        // Check if already enrolled
+        const isEnrolled = course.enrolledStudents.some(
+            enrollment => enrollment.student.toString() === userId
+        );
+
+        if (isEnrolled) {
+            return res.status(400).json({ message: "Already enrolled in this course" });
+        }
+
+        // Add student to course
+        course.enrolledStudents.push({
+            student: userId,
+            enrollmentDate: new Date(),
+            progress: 0
+        });
+
+        await course.save();
+
+        // Add course to user's enrolled courses
+        await User.findByIdAndUpdate(userId, {
+            $push: { enrolledCourses: courseId }
+        });
+
+        res.status(200).json({ message: "Successfully enrolled in course" });
+    } catch (error) {
+        console.error('Enrollment error:', error);
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+};
+
+const getEnrolledCourses = async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        
+        const user = await User.findById(userId)
+            .populate({
+                path: 'enrolledCourses',
+                populate: {
+                    path: 'instructor',
+                    select: 'name email'
+                }
+            });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.json(user.enrolledCourses);
+    } catch (error) {
+        console.error('Get enrolled courses error:', error);
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+};
+
 module.exports = {
   createCourse,
   getCourses,
   getCourseById,
   updateCourse,
   deleteCourse,
-  getTeacherCourses
+  getTeacherCourses,
+  enrollInCourse,
+  getEnrolledCourses
 };
 
