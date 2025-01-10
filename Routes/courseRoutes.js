@@ -9,11 +9,8 @@ const {
   updateCourse,
   deleteCourse,
   getTeacherCourses,
-<<<<<<< HEAD
   enrollInCourse,
   getEnrolledCourses,
-=======
->>>>>>> 3b519d9325aa81aaeb499c208747a215a032b991
 } = require("../Controllers/courseController");
 
 // Apply auth middleware to all routes
