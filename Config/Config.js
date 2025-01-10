@@ -11,3 +11,6 @@ const connection = async () => {
 }
 
 module.exports = connection
+PORT=8080
+MONGO_URI=mongodb+srv://udaylashkari2:Lashkari@cluster0.zllfv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+JWT_SECRET=udaylashkari
