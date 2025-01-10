@@ -12,25 +12,32 @@ const courseSchema = new mongoose.Schema(
     },
     instructor: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // Assuming you have a User model for the instructor
+      ref: "User",
       required: true,
     },
     image: {
-      type: String, // Base64 or image URL
+      type: String,
       required: false,
     },
     lessons: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Lesson", // Assuming you have a Lesson model for lessons
+        ref: "Lesson",
       },
     ],
-    enrolledStudents: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User", // Referencing the User model for enrolled students
-      }
-    ],
+    category: {
+      type: String,
+      required: true,
+    },
+    duration: {
+      type: Number,
+      required: true,
+    },
+    level: {
+      type: String,
+      enum: ['beginner', 'intermediate', 'advanced'],
+      required: true
+    }
   },
   { timestamps: true }
 );

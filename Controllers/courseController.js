@@ -78,7 +78,6 @@ module.exports = {
   getCourseById,
   updateCourse,
   deleteCourse,
-  enrollStudent,
-  getEnrolledStudents,
+
 };
 
